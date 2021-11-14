@@ -4,6 +4,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,6 +43,8 @@ public class CustomerResource {
     	
     	EntityModel<CustomerBean> model = EntityModel.of(service.getCustomerById(id));
     	
+    	WebMvcLinkBuilder link = linkTo(methodOn(this.getClass()).getAllUsers());
+    	model.add(link.withRel("all-customers"));
         return model;
     }
     
