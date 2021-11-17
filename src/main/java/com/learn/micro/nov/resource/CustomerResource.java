@@ -1,8 +1,11 @@
 package com.learn.micro.nov.resource;
 
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.learn.micro.nov.bean.CustomerBean;
@@ -20,6 +24,8 @@ import com.learn.micro.nov.service.CustomerService;
 
 @RestController
 public class CustomerResource {
+	@Autowired
+	private MessageSource msgSource;
 	
 	@Autowired
 	CustomerService service;
@@ -64,5 +70,16 @@ public class CustomerResource {
     private void updateCustomer(@RequestBody CustomerBean customer, @PathVariable("id") int id) {
         service.updateCustomer(id, customer);
     }
+    
+    @GetMapping("/test-internationalized")
+	public String getStaticTextInternationalized(
+			//@RequestHeader(name="Accept-Language", required=false) Locale locale
+			){
+	
+		return msgSource.getMessage("user.morning.greeting", null, "Default Message", 
+				//locale
+				LocaleContextHolder.getLocale());  
+		
+	}
 	
 }
